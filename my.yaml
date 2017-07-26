@@ -1,0 +1,11 @@
+kakou:
+  host: 10.123.123.123
+  port: 8098
+  city: bldh
+  username: 123
+  password: 123
+temp:
+  host: 10.123.123.123
+  port: 8098
+  city: bl
+step: 200
