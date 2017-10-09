@@ -11,12 +11,12 @@ class TempKakou(object):
         self.port = kwargs['port']
         self.city = kwargs['city']
         self.headers = {'content-type': 'application/json'}
-        self.status = False
 
+        self.status = False
 
     def get_kakou_info(self, start_id, end_id):
         """根据id范围获取车辆信息"""
-        url = 'http://%s:%s/tempkk2/final/%s?q={"startid":%s,"endid":%s}' % (
+        url = 'http://%s:%s/final/%s?q={"startid":%s,"endid":%s}' % (
             self.host, self.port, self.city, start_id, end_id)
         try:
             r = requests.get(url, headers=self.headers)
@@ -32,7 +32,7 @@ class TempKakou(object):
 
     def get_maxid(self):
         """根据id范围获取车辆信息"""
-        url = 'http://{0}:{1}/tempkk2/maxid/{2}'.format(
+        url = 'http://{0}:{1}/maxid/{2}'.format(
             self.host, self.port, self.city)
         try:
             r = requests.get(url, headers=self.headers)
@@ -47,7 +47,7 @@ class TempKakou(object):
             raise
 
     def post_final(self, data):
-        url = 'http://{0}:{1}/tempkk2/final/{2}'.format(self.host, self.port, self.city)
+        url = 'http://{0}:{1}/final/{2}'.format(self.host, self.port, self.city)
         try:
             r = requests.post(url, headers=self.headers, data=json.dumps(data))
             if r.status_code == 201:
@@ -61,7 +61,7 @@ class TempKakou(object):
             raise
 
     def post_temp(self, data):
-        url = 'http://{0}:{1}/tempkk2/temp/{2}'.format(self.host, self.port, self.city)
+        url = 'http://{0}:{1}/temp/{2}'.format(self.host, self.port, self.city)
         try:
             r = requests.post(url, headers=self.headers, data=json.dumps(data))
             if r.status_code == 201:
