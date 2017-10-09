@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import time
 import datetime
 import json
@@ -7,71 +7,13 @@ import arrow
 import requests
 from requests.auth import HTTPBasicAuth, HTTPDigestAuth
 
-from kakou import Kakou
-from temp_kakou import TempKakou
-
-class TempKakouTest(object):
-    def __init__(self):
-        self.ini = {
-            'host': '10.47.223.151',
-            'port': 5000,
-	    'city': 'lm'
-        }
-        self.uk = TempKakou(**self.ini)
-    
-    def test_kakou_post(self):
-        """上传卡口数据"""
-        data = [
-            {
-		'id': 123,
-		'cltx_id': 3,
-                'jgsj': arrow.now().format('YYYY-MM-DD HH:mm:ss'),
-                'hphm': u'粤L70939',
-		'hpys': u'蓝牌',
-		'hpys_id': 1,
-		'hpys_code': 'BU',
-		'kkdd': u'交警支队卡口',
-                'kkdd_id': '441302004',
-                'fxbh': u'进城',
-                'fxbh_code': 'IN',
-                'cdbh':4,
-		'clsd': 45,
-		'hpzl': '7',
-		'kkbh': '1234',
-		'clbj': 'F',
-                'imgurl': u'http:///img/123.jpg'
-            },
-            {
-		'id': 124,
-		'cltx_id': 4,
-                'jgsj': arrow.now().format('YYYY-MM-DD HH:mm:ss'),
-                'hphm': u'粤L12345',
-		'hpys': u'蓝牌',
-		'hpys_id': 1,
-		'hpys_code': 'BU',
-		'kkdd': u'交警支队卡口',
-                'kkdd_id': '441302004',
-                'fxbh': u'进城',
-                'fxbh_code': 'IN',
-                'cdbh':4,
-		'clsd': 45,
-		'hpzl': '7',
-		'kkbh': '1234',
-		'clbj': 'F',
-                'imgurl': u'http:///img/124.jpg'
-            }
-        ]
-
-        r = self.uk.post_kakou(data)
-        print r
-        #assert isinstance(r, dict) == True
-        #assert r['headers'] == 201
+from helper_consul import ConsulAPI
 
 
 class KakouTest(object):
     def __init__(self):
         self.ini = {
-            'host': '10.47.223.147',
+            'host': '127.0.0.1',
             'port': 8081,
 	    'username': 'zkkakou',
 	    'password': 'kakoutest'
@@ -84,19 +26,46 @@ class KakouTest(object):
     def test_get_kakou(self):
         """根据ID范围获取卡口信息"""
         r = self.kk.get_kakou(54059471, 54059473)
-        print r
+        print(r)
         #assert 'total_count' in r
         
     def test_get_maxid(self):
         """获取最大ID"""
         r = self.kk.get_maxid()
-        print r
+        print(r)
         #assert 'maxid' in r
 
-if __name__ == '__main__':  # pragma nocover
-    #ut = TempKakouTest()
-    #ut.test_kakou_post()
-    kt = KakouTest()
-    kt.test_get_maxid()
-    kt.test_get_kakou()
 
+class ConsulTest(object):
+    def __init__(self):
+        self.ini = {
+            'host': '127.0.0.1',
+            'port': 8500
+        }
+        self.con = ConsulAPI(**self.ini)
+
+    def __del__(self):
+        pass
+
+    def test_get_id(self):
+        print(self.con.get_id())
+
+    def test_get_service(self):
+        print(self.con.get_service('kakouHcq'))
+        print(self.con.get_service('proxy'))
+
+    def test_get_health(self):
+        print(self.con.get_health('kakouHcq'))
+        
+#    def test_set_id(self):
+#        r = self.con.get_id()
+#        cas = r[0]['ModifyIndex']
+#        print(self.con.put_id(23, cas))
+
+
+if __name__ == '__main__':  # pragma nocover
+    ct = ConsulTest()
+    ct.test_get_id()
+    #ct.test_set_id()
+    #ct.test_get_service()
+    ct.test_get_health()
