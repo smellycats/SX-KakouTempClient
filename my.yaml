@@ -8,4 +8,8 @@ temp:
   host: 10.123.123.123
   port: 8098
   city: bl
+consul:
+  host: 10.47.123.123
+  port: 8500
 step: 200
+kkdd: '441302000'
